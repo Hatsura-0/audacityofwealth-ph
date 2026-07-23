@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Audacity of Wealth | Civic Tech & Transparency</title>
+    
+    <!-- Embedded SVG Favicon (AOW - Audacity Of Wealth) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%237b1113%22/><text x=%2250%22 y=%2268%22 font-size=%2248%22 font-family=%22-apple-system, sans-serif%22 font-weight=%22900%22 fill=%22white%22 text-anchor=%22middle%22>AOW</text></svg>">
+
+    <style>
+        /* CSS RESET & VARIABLES */
+        :root {
+            --bg-color: #f8fafc;
+            --text-color: #0f172a;
+            --text-muted: #475569;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --accent-color: #7b1113; /* UP Maroon */
+            --accent-hover: #991b1e;
+            --nav-bg: #ffffff;
+            --hero-bg: #090d16;
+            --code-bg: #f1f5f9;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0b0f19;
+            --text-color: #f1f5f9;
+            --text-muted: #94a3b8;
+            --card-bg: #161e2e;
+            --border-color: #243046;
+            --nav-bg: #0b0f19;
+            --hero-bg: #030712;
+            --code-bg: #1e293b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* NAVIGATION */
+        nav {
+            background-color: var(--nav-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 900;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            text-transform: uppercase;
+        }
+
+        button#theme-toggle {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.4rem 0.8rem;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+
+        button#theme-toggle:hover {
+            background-color: var(--border-color);
+        }
+
+        /* HERO HEADER */
+        .hero {
+            background-color: var(--hero-bg);
+            color: #ffffff;
+            padding: 5rem 0 4rem 0;
+            text-align: center;
+            border-bottom: 4px solid var(--accent-color);
+            background-image: radial-gradient(circle at center, #1e293b 0%, #030712 100%);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background-color: rgba(123, 17, 19, 0.3);
+            color: #f87171;
+            border: 1px solid var(--accent-color);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1.15;
+            margin-bottom: 1.25rem;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: #94a3b8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* CONTENT BLOCKS */
+        .main-content {
+            padding-top: 3.5rem;
+            padding-bottom: 4rem;
+        }
+
+        .content-block {
+            margin-bottom: 4.5rem;
+        }
+
+        h2.section-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            border-left: 5px solid var(--accent-color);
+            padding-left: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .section-desc {
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+        }
+
+        /* ESSAY & THEORY BOXES */
+        .essay-card {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .essay-card p {
+            margin-bottom: 1.25rem;
+            font-size: 1.1rem;
+        }
+
+        .essay-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .theory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .theory-box {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 6px;
+            padding: 1.5rem;
+        }
+
+        .theory-box h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        .theory-box p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        /* HOW-TO GRID & CARDS */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-icon-wrapper {
+            background-color: #1e293b;
+            color: white;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        .card-icon-wrapper h3 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-content h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid var(--border-color);
+            margin: 1rem 0;
+        }
+
+        .tech-list {
+            padding-left: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            font-size: 0.95rem;
+        }
+
+        .tech-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* TOOLKIT & CTA */
+        .cta-box {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            padding: 2.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--accent-color);
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 3rem 1rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer p {
+            margin-bottom: 0.4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV BAR -->
+    <nav>
+        <div class="container nav-container">
+            <div class="logo">The Audacity of Wealth</div>
+            <button id="theme-toggle">Toggle Dark Mode</button>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="hero">
+        <div class="container">
+            <span class="hero-badge">Civic Technology & Systems Analysis</span>
+            <h1>The Audacity of Wealth</h1>
+            <p>A manifesto on how everyday citizens can use simple digital tools to expose the extreme wealth and political impunity of the Philippine elite.</p>
+        </div>
+    </header>
+
+    <div class="container main-content">
+        
+        <!-- INTRO MANIFESTO -->
+        <section id="manifesto-intro" class="content-block">
+            <h2 class="section-title">The Problem</h2>
+            <div class="essay-card">
+                <p>In a nation where the daily minimum wage remains pegged below <strong>PHP 650</strong>, a parallel reality exists for the Philippine ruling class. Unexplained wealth is no longer hidden in secret bank accounts. It is casually posted and bragged about across social media.</p>
+                <p>Under <strong>Republic Act No. 6713</strong>, public officials and their immediate families are legally required to live modestly. When public servants flaunt luxury items that mathematically eclipse their official government salaries, they are doing more than just breaking the law. They are committing a form of violence against the working class who struggle to get by.</p>
+                <p>Their bragging is also their biggest weakness because every post leaves a digital trail. This site is a guide to shifting our power from passive anger to active citizen journalism. It shows how anyone with a smartphone can help hold the elite accountable.</p>
+            </div>
+        </section>
+
+        <!-- OSINT VECTORS (Plain English Focus) -->
+        <section id="osint-vectors" class="content-block">
+            <h2 class="section-title">The Citizen's Detective Toolkit</h2>
+            <p class="section-desc">You do not need to be a hacker to track corruption. Here are the simple methods everyday people use to verify the digital trails of unexplained wealth.</p>
+            
+            <div class="grid">
+                
+                <!-- Vector 1: Image Forensics -->
+                <div class="card">
+                    <div class="card-icon-wrapper">
+                        <h3>INVESTIGATING PHOTOS</h3>
+                    </div>
+                    <div class="card-content">
+                        <h4>Finding the Hidden Details</h4>
+                        <p style="font-size: 0.95rem; margin-bottom: 1rem;">A photo is worth a thousand words, but it also contains hidden data that can prove exactly what a politician is trying to hide.</p>
+                        <ul class="tech-list">
+                            <li><strong>Price Tagging:</strong> Using free tools like the Google app or Google Lens, anyone can scan a photo of a politician's luxury watch, designer bag, or sports car to instantly find out its exact brand and retail price.</li>
+                            <li><strong>Location Tracking:</strong> Many original photos hide metadata. These are secret tags that record the exact time, date, and GPS location of where the photo was taken, proving where an official really was.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Vector 2: Geospatial -->
+                <div class="card">
+                    <div class="card-icon-wrapper">
+                        <h3>SATELLITE SNOOPING</h3>
+                    </div>
+                    <div class="card-content">
+                        <h4>Mapping Hidden Mansions</h4>
+                        <p style="font-size: 0.95rem; margin-bottom: 1rem;">Corrupt wealth is often hidden behind high walls in the form of massive and undeclared real estate. We can look past those walls from above.</p>
+                        <ul class="tech-list">
+                            <li><strong>Time-Travel Maps:</strong> Free tools like Google Earth allow you to look at historical satellite images. You can literally watch a hidden mansion or private resort being built over the years.</li>
+                            <li><strong>Measuring from Above:</strong> You do not need to be on the ground to know how big a property is. Satellite maps let citizens measure the size of massive estates and private pools to estimate how much they really cost.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Vector 3: Data Mining -->
+                <div class="card">
+                    <div class="card-icon-wrapper">
+                        <h3>FOLLOWING THE PAPER TRAIL</h3>
+                    </div>
+                    <div class="card-content">
+                        <h4>Checking the Math</h4>
+                        <p style="font-size: 0.95rem; margin-bottom: 1rem;">Connecting the absurd lifestyle to official documents requires checking public records that belong to the people.</p>
+                        <ul class="tech-list">
+                            <li><strong>Checking their SALN:</strong> Citizens have the right to request a politician's Statement of Assets, Liabilities, and Net Worth (SALN) through the eFOI portal. You can then compare their declared wealth against the millions they flaunt online.</li>
+                            <li><strong>Finding the Real Owners:</strong> Using public government databases, citizens can track down who really owns the businesses and dummy corporations connected to sudden political wealth.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SOCIOLOGICAL THEORY -->
+        <section id="theory" class="content-block">
+            <h2 class="section-title">Why Do They Get Away With It?</h2>
+            <p class="section-desc">Understanding the social reasons why extreme political inequality persists.</p>
+            
+            <div class="theory-grid">
+                <div class="theory-box">
+                    <h3>Normalization of Deviance</h3>
+                    <p>When corrupt behavior, such as politicians openly living like billionaires, happens repeatedly without anyone going to jail, the public becomes numb. It stops looking like a crime and starts looking like just how politics works.</p>
+                </div>
+
+                <div class="theory-box">
+                    <h3>Cultural Hegemony</h3>
+                    <p>Corrupt elites stay in power by changing how we think. By portraying their massive wealth as blessings or hard work, they condition the public to admire them instead of questioning why the rest of the country is poor.</p>
+                </div>
+
+                <div class="theory-box">
+                    <h3>The Sociological Imagination</h3>
+                    <p>This is the ability to connect your personal struggles, like not being able to afford groceries or medicine, to the bigger picture of corrupt politicians hoarding public funds. Your private problems are actually public issues.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECURE ARCHIVING -->
+        <section id="archiving" class="content-block">
+            <div class="cta-box">
+                <h2 style="font-size: 1.6rem; margin-bottom: 0.5rem; color: var(--accent-color);">Saving the Evidence</h2>
+                <p style="font-size: 1.05rem;">Do not just take a screenshot, as politicians can easily claim those are edited or fake. True accountability requires solid proof. Use websites like <strong>Archive.ph</strong> or the <strong>Wayback Machine</strong> to save a permanent and frozen copy of their public posts before they hit delete. This creates a permanent web link that proves the post was real.</p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p><strong>The Audacity of Wealth | Civic Transparency Project</strong></p>
+        <p>Social Science X4 Final Creative Output | Midyear 2026</p>
+        <p>University of the Philippines Diliman</p>
+    </footer>
+
+    <!-- JAVASCRIPT FOR INTERACTIVITY -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const body = document.body;
+
+            // Check local storage for theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                body.setAttribute('data-theme', savedTheme);
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                if (body.getAttribute('data-theme') === 'dark') {
+                    body.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
