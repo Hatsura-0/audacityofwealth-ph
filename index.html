@@ -46,6 +46,9 @@
             color: var(--text-color);
             line-height: 1.7;
             transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         .container {
@@ -138,6 +141,7 @@
         .main-content {
             padding-top: 3.5rem;
             padding-bottom: 4rem;
+            flex: 1;
         }
 
         .content-block {
@@ -279,17 +283,98 @@
             border-left: 5px solid var(--accent-color);
         }
 
-        /* FOOTER */
+        /* FOOTER & DROP-UP MENU */
         footer {
             text-align: center;
-            padding: 3rem 1rem;
+            padding: 3rem 1rem 2rem 1rem;
             border-top: 1px solid var(--border-color);
+            background-color: var(--nav-bg);
             color: var(--text-muted);
             font-size: 0.9rem;
+            margin-top: auto;
         }
 
         footer p {
             margin-bottom: 0.4rem;
+        }
+
+        .dropup-container {
+            position: relative;
+            display: inline-block;
+            margin-top: 1.5rem;
+        }
+
+        .dropup-btn {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            padding: 0.6rem 1.5rem;
+            font-size: 0.9rem;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .dropup-btn:hover {
+            background-color: var(--border-color);
+        }
+
+        .dropup-content {
+            display: none;
+            position: absolute;
+            bottom: 120%; /* Opens upward */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--card-bg);
+            min-width: 320px;
+            max-width: 90vw;
+            width: max-content;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0px -8px 20px rgba(0, 0, 0, 0.15);
+            text-align: left;
+            z-index: 100;
+        }
+
+        /* Data theme adjustments for dropup shadow */
+        [data-theme="dark"] .dropup-content {
+            box-shadow: 0px -8px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .dropup-content.show {
+            display: block;
+        }
+
+        .dropup-content ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .dropup-content li {
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .dropup-content li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .dropup-content a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .dropup-content a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -412,20 +497,36 @@
 
     </div>
 
-    <!-- FOOTER -->
+    <!-- FOOTER WITH DROP-UP REFERENCES -->
     <footer>
         <p><strong>The Audacity of Wealth | Civic Transparency Project</strong></p>
         <p>Social Science X4 Final Creative Output | Midyear 2026</p>
         <p>University of the Philippines Diliman</p>
+
+        <!-- Drop-up Reference Section -->
+        <div class="dropup-container">
+            <button class="dropup-btn" id="dropupToggle">View References &#9652;</button>
+            <div class="dropup-content" id="refsDropup">
+                <ul>
+                    <li><strong>Minimum Wage Data:</strong> National Wages and Productivity Commission. (2024). <em>Daily Minimum Wage Rates in the National Capital Region (NCR)</em>. Department of Labor and Employment. <a href="https://nwpc.dole.gov.ph/" target="_blank">View Source</a></li>
+                    
+                    <li><strong>Legal Mandate on Modest Living:</strong> Republic Act No. 6713. (1989). <em>An Act Establishing a Code of Conduct and Ethical Standards for Public Officials and Employees</em>. Official Gazette of the Republic of the Philippines. <a href="https://www.csc.gov.ph/downloads/category/104-ra-6713-code-of-conduct-and-ethical-standards" target="_blank">View Source</a></li>
+                    
+                    <li><strong>eFOI Portal:</strong> Freedom of Information Philippines. (n.d.). <em>Electronic Freedom of Information (eFOI) Portal</em>. Presidential Communications Office. <a href="https://www.foi.gov.ph/" target="_blank">View Source</a></li>
+                    
+                    <li><strong>Digital Archiving Tools:</strong> Internet Archive. (n.d.). <em>Wayback Machine</em>. <a href="https://archive.org/web/" target="_blank">View Source</a> | Archive Today. (n.d.). <em>Webpage Capture</em>. <a href="https://archive.ph/" target="_blank">View Source</a></li>
+                </ul>
+            </div>
+        </div>
     </footer>
 
     <!-- JAVASCRIPT FOR INTERACTIVITY -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Theme Toggle Logic
             const themeToggleBtn = document.getElementById('theme-toggle');
             const body = document.body;
 
-            // Check local storage for theme preference
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme) {
                 body.setAttribute('data-theme', savedTheme);
@@ -438,6 +539,24 @@
                 } else {
                     body.setAttribute('data-theme', 'dark');
                     localStorage.setItem('theme', 'dark');
+                }
+            });
+
+            // Dropup Toggle Logic
+            const dropupBtn = document.getElementById('dropupToggle');
+            const dropupContent = document.getElementById('refsDropup');
+
+            dropupBtn.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevents the window click listener from immediately closing it
+                dropupContent.classList.toggle('show');
+            });
+
+            // Close the dropup if the user clicks anywhere else outside of it
+            window.addEventListener('click', (event) => {
+                if (!event.target.matches('.dropup-btn') && !event.target.closest('.dropup-content')) {
+                    if (dropupContent.classList.contains('show')) {
+                        dropupContent.classList.remove('show');
+                    }
                 }
             });
         });
